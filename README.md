@@ -6,17 +6,19 @@
 
 ## Team Members
 
-<< List team member names >>
+Yashasvi Agarwal, Elizabeth Link
 
 ***
 
 ## Project Description
 
-<< Give an overview of your project >>
+Music Mixer - music pad containing different buttons that correspond to keyboard. Buttons play differeny notes to create music. User can hit record to create song and can hear it back.
 
 ***    
 
 ## GUI Design
+
+In gui.jpg
 
 ### Initial Design
 
@@ -30,16 +32,23 @@
 
 ### Features
 
-1. << Feature 1 >>
-2. << Feature 2 >>
-3. << Feature 3 >>
-4. << Feature 4 >>
-5. << Feature 5 >>
+1. User interface
+2. Obstacle collisions
+3. Start Menu
+4. Learning mode - instructional text pop up
+5. Looping and sequencing
 
 ### Classes
 
-- << You should have a list of each of your classes with a description >>
+Key
+- box that can be interacted with to play sound
+
+Record
+- Records audio
+- Will have timer/stopwatch
+
+Play / Pause
+- Plays back recorded audio
+- Stops played back audio
 
 ## ATP
-
-
