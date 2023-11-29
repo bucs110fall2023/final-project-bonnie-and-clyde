@@ -1,56 +1,165 @@
-from playsound import playsound
 import pygame
-import sys
 
-pygame.init()
+class Sound:
+    def __init__(self, file_path, channel):
+        self.file_path = file_path
+        self.channel = channel
 
-screen = pygame.display.set_mode((400, 300))
-pygame.display.set_caption("pookie vibes")
+    def play(self):
+        self.channel.play(pygame.mixer.Sound(self.file_path))
+        #pygame.mixer.Channel(0).play(pygame.mixer.Sound(self.file_path))
+        print(f"Playing sound: {self.file_path}")
 
-pygame.mixer.init()
+class WhiteBox:
+    def __init__(self, note, key, position):
+        self.note = note
+        self.key = key
+        self.position = position
+        self.width = 100
+        self.height = 200
+        self.default_color = (255, 153, 153)
+        self.active_color = (225, 102, 102)
+        self.color = self.default_color
+        self.activation_time = 0
 
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+    def draw(self, screen):
+        pygame.draw.rect(screen, self.color, (self.position[0], self.position[1], self.width, self.height))
+
+    def activate(self):
+        # Change color when activated
+        self.color = self.active_color
+        self.activation_time = pygame.time.get_ticks()
         
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_a:
-                pygame.mixer.Channel(0).play(pygame.mixer.Sound("notes/(1)_noteC_letterA.mp3"))
-            if event.key == pygame.K_s:
-                pygame.mixer.Channel(1).play(pygame.mixer.Sound("notes/(2)_noteD_letterS.mp3"))
-            if event.key == pygame.K_d:
-                pygame.mixer.Channel(2).play(pygame.mixer.Sound("notes/(3)_noteE_letterD.mp3"))
-            if event.key == pygame.K_f:
-                pygame.mixer.Channel(3).play(pygame.mixer.Sound("notes/(4)_noteF_letterF.mp3"))
-            if event.key == pygame.K_g:
-                pygame.mixer.Channel(4).play(pygame.mixer.Sound("notes/(5)_noteG_letterG.mp3"))
-            if event.key == pygame.K_h:
-                pygame.mixer.Channel(5).play(pygame.mixer.Sound("notes/(6)_noteA_letterH.mp3"))
-            if event.key == pygame.K_j:
-                pygame.mixer.Channel(6).play(pygame.mixer.Sound("notes/(7)_noteB_letterJ.mp3"))
-            if event.key == pygame.K_k:
-                pygame.mixer.Channel(7).play(pygame.mixer.Sound("notes/(8)_noteC_letterK.mp3"))
+    def update_color(self):
+        # Reset color after 2 seconds (adjust the duration as needed)
+        elapsed_time = pygame.time.get_ticks() - self.activation_time
+        if elapsed_time > 100:  # Change 2000 to the desired duration in milliseconds
+            self.color = self.default_color
+        
+class BlackBox:
+    def __init__(self, note, key, position):
+        self.note = note
+        self.key = key
+        self.position = position
+        self.width = 70
+        self.height = 110
+        self.default_color = (0, 0, 0)
+        self.active_color = (64, 64, 64)
+        self.color = self.default_color
+        self.activation_time = 0
 
-    pygame.display.flip()
+    def draw(self, screen):
+        pygame.draw.rect(screen, self.color, (self.position[0], self.position[1], self.width, self.height))
 
+    def activate(self):
+        # Change color when activated
+        self.color = self.active_color
+        self.activation_time = pygame.time.get_ticks()
+        
+    def update_color(self):
+        # Reset color after 2 seconds (adjust the duration as needed)
+        elapsed_time = pygame.time.get_ticks() - self.activation_time
+        if elapsed_time > 100:  # Change 2000 to the desired duration in milliseconds
+            self.color = self.default_color
+            
+            
+class PianoController:
+    def __init__(self):
+        pygame.init()
+        pygame.mixer.init()
 
+        self.screen = pygame.display.set_mode((940, 300))
+        pygame.display.set_caption("pookie vibes")
 
+        self.channels = [pygame.mixer.Channel(i) for i in range(8)]
+        
+        self.white_sounds = [
+            Sound("notes/(W1)_noteC_letterA.mp3", self.channels[0]),
+            Sound("notes/(W2)_noteD_letterS.mp3", self.channels[1]),
+            Sound("notes/(W3)_noteE_letterD.mp3", self.channels[2]),
+            Sound("notes/(W4)_noteF_letterF.mp3", self.channels[3]),
+            Sound("notes/(W5)_noteG_letterG.mp3", self.channels[4]),
+            Sound("notes/(W6)_noteA_letterH.mp3", self.channels[5]),
+            Sound("notes/(W7)_noteB_letterJ.mp3", self.channels[6]),
+            Sound("notes/(W8)_noteC_letterK.mp3", self.channels[7]),
+        ]
 
+        self.white_boxes = [
+            WhiteBox(self.white_sounds[0], pygame.K_a, (30, 50)),
+            WhiteBox(self.white_sounds[1], pygame.K_s, (142, 50)),
+            WhiteBox(self.white_sounds[2], pygame.K_d, (254, 50)),
+            WhiteBox(self.white_sounds[3], pygame.K_f, (366, 50)),
+            WhiteBox(self.white_sounds[4], pygame.K_g, (478, 50)),
+            WhiteBox(self.white_sounds[5], pygame.K_h, (590, 50)),
+            WhiteBox(self.white_sounds[6], pygame.K_j, (702, 50)),
+            WhiteBox(self.white_sounds[7], pygame.K_k, (814, 50)),
+        ]
 
-'''
-import pygame
-#import your controller
+        self.channels = [pygame.mixer.Channel(i) for i in range(5)]
+        
+        self.black_sounds = [
+            Sound("notes/(B1)_noteC#_letterW.mp3", self.channels[0]),
+            Sound("notes/(B2)_noteD#_letterE.mp3", self.channels[1]),
+            Sound("notes/(B3)_noteF#_letterT.mp3", self.channels[2]),
+            Sound("notes/(B4)_noteG#_letterY.mp3", self.channels[3]),
+            Sound("notes/(B5)_noteA#_letterU.mp3", self.channels[4]),
+        ]
+
+        self.black_boxes = [
+            BlackBox(self.black_sounds[0], pygame.K_w, (106, 50)),
+            BlackBox(self.black_sounds[1], pygame.K_e, (215, 50)),
+            BlackBox(self.black_sounds[2], pygame.K_t, (435, 50)),
+            BlackBox(self.black_sounds[3], pygame.K_y, (550, 50)),
+            BlackBox(self.black_sounds[4], pygame.K_u, (660, 50)),
+
+        ]
+        
+    def handle_user_input(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+
+            elif event.type == pygame.KEYDOWN:
+                for box in self.white_boxes:
+                    if event.key == box.key:
+                        box.note.play()
+                        box.activate()
+                for box in self.black_boxes:
+                    if event.key == box.key:
+                        box.note.play()
+                        box.activate()
+                        
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                for box in self.white_boxes:
+                    if box.position[0] < event.pos[0] < box.position[0] + box.width and \
+                       box.position[1] < event.pos[1] < box.position[1] + box.height:
+                        box.note.play()
+                        box.activate()
+                for box in self.black_boxes:
+                    if box.position[0] < event.pos[0] < box.position[0] + box.width and \
+                       box.position[1] < event.pos[1] < box.position[1] + box.height:
+                        box.note.play()
+                        box.activate()
+
+    def update_gui(self):
+        self.screen.fill((255, 255, 255))  # Fill the screen with white
+
+        for box in self.white_boxes:
+            box.update_color()
+            box.draw(self.screen)
+        for box in self.black_boxes:
+            box.update_color()
+            box.draw(self.screen)
+
+        pygame.display.flip()
 
 def main():
-    pygame.init()
-    #Create an instance on your controller object
-    #Call your mainloop
-    
-    ###### NOTHING ELSE SHOULD GO IN main(), JUST THE ABOVE 3 LINES OF CODE ######
+    piano = PianoController()
 
-# https://codefather.tech/blog/if-name-main-python/
+    while True:
+        piano.handle_user_input()
+        piano.update_gui()
+
 if __name__ == '__main__':
     main()
-'''
