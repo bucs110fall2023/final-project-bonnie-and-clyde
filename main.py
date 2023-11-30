@@ -7,61 +7,51 @@ class Sound:
 
     def play(self):
         self.channel.play(pygame.mixer.Sound(self.file_path))
-        #pygame.mixer.Channel(0).play(pygame.mixer.Sound(self.file_path))
-        print(f"Playing sound: {self.file_path}")
 
-class WhiteBox:
+class Box:
     def __init__(self, note, key, position):
         self.note = note
         self.key = key
         self.position = position
-        self.width = 100
-        self.height = 200
-        self.default_color = (255, 153, 153)
-        self.active_color = (225, 102, 102)
-        self.color = self.default_color
         self.activation_time = 0
-
+        self.activated_this_iteration = False
+        
+        self.width = None
+        self.height = None
+        self.default_color = None
+        self.active_color = None
+        self.color = None
+        
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, (self.position[0], self.position[1], self.width, self.height))
 
     def activate(self):
-        # Change color when activated
         self.color = self.active_color
         self.activation_time = pygame.time.get_ticks()
+        self.activated_this_iteration = True
         
     def update_color(self):
-        # Reset color after 2 seconds (adjust the duration as needed)
         elapsed_time = pygame.time.get_ticks() - self.activation_time
-        if elapsed_time > 100:  # Change 2000 to the desired duration in milliseconds
+        if elapsed_time > 100:
             self.color = self.default_color
         
-class BlackBox:
+class WhiteBox(Box):
     def __init__(self, note, key, position):
-        self.note = note
-        self.key = key
-        self.position = position
+        super().__init__(note, key, position)
+        self.width = 100
+        self.height = 200
+        self.default_color = (255, 255, 255)
+        self.active_color = (224, 224, 224)
+        self.color = self.default_color
+
+class BlackBox(Box):
+    def __init__(self, note, key, position):
+        super().__init__(note, key, position)
         self.width = 70
         self.height = 110
         self.default_color = (0, 0, 0)
         self.active_color = (64, 64, 64)
-        self.color = self.default_color
-        self.activation_time = 0
-
-    def draw(self, screen):
-        pygame.draw.rect(screen, self.color, (self.position[0], self.position[1], self.width, self.height))
-
-    def activate(self):
-        # Change color when activated
-        self.color = self.active_color
-        self.activation_time = pygame.time.get_ticks()
-        
-    def update_color(self):
-        # Reset color after 2 seconds (adjust the duration as needed)
-        elapsed_time = pygame.time.get_ticks() - self.activation_time
-        if elapsed_time > 100:  # Change 2000 to the desired duration in milliseconds
-            self.color = self.default_color
-            
+        self.color = self.default_color          
             
 class PianoController:
     def __init__(self):
@@ -69,7 +59,7 @@ class PianoController:
         pygame.mixer.init()
 
         self.screen = pygame.display.set_mode((940, 300))
-        pygame.display.set_caption("pookie vibes")
+        pygame.display.set_caption("CS 110 FINAL EXAM")
 
         self.channels = [pygame.mixer.Channel(i) for i in range(8)]
         
@@ -111,9 +101,8 @@ class PianoController:
             BlackBox(self.black_sounds[2], pygame.K_t, (435, 50)),
             BlackBox(self.black_sounds[3], pygame.K_y, (550, 50)),
             BlackBox(self.black_sounds[4], pygame.K_u, (660, 50)),
-
         ]
-        
+            
     def handle_user_input(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -124,26 +113,36 @@ class PianoController:
                     if event.key == box.key:
                         box.note.play()
                         box.activate()
+                        return
                 for box in self.black_boxes:
                     if event.key == box.key:
                         box.note.play()
                         box.activate()
-                        
+                        return
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                for box in self.white_boxes:
-                    if box.position[0] < event.pos[0] < box.position[0] + box.width and \
-                       box.position[1] < event.pos[1] < box.position[1] + box.height:
-                        box.note.play()
-                        box.activate()
+                mouse_pos = pygame.mouse.get_pos()
+                
                 for box in self.black_boxes:
                     if box.position[0] < event.pos[0] < box.position[0] + box.width and \
                        box.position[1] < event.pos[1] < box.position[1] + box.height:
-                        box.note.play()
-                        box.activate()
+                        if not box.activated_this_iteration:
+                            box.note.play()
+                            box.activate()
+                            return
+                for box in self.white_boxes:
+                    if box.position[0] < event.pos[0] < box.position[0] + box.width and \
+                       box.position[1] < event.pos[1] < box.position[1] + box.height:
+                        if not box.activated_this_iteration:
+                            box.note.play()
+                            box.activate()
+                            return
+                
+                for box in self.white_boxes + self.black_boxes:
+                    box.activated_this_iteration = False
 
     def update_gui(self):
-        self.screen.fill((255, 255, 255))  # Fill the screen with white
+        self.screen.fill((153, 204, 255))
 
         for box in self.white_boxes:
             box.update_color()
