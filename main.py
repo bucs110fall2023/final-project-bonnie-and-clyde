@@ -75,7 +75,6 @@ class Box:
         self.key = key
         self.position = position
         self.activation_time = 0
-        self.activated_this_iteration = False
         self.width = None
         self.height = None
         self.default_color = None
@@ -95,7 +94,6 @@ class Box:
         '''
         self.color = self.active_color
         self.activation_time = pygame.time.get_ticks()
-        self.activated_this_iteration = True
         
     def update_color(self):
         '''
@@ -245,23 +243,21 @@ class PianoController:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 
+                hit = False
                 for box in self.black_boxes:
                     if box.position[0] < event.pos[0] < box.position[0] + box.width and \
                        box.position[1] < event.pos[1] < box.position[1] + box.height:
-                        if not box.activated_this_iteration:
                             box.note.play()
                             box.activate()
-                            return
-                for box in self.white_boxes:
-                    if box.position[0] < event.pos[0] < box.position[0] + box.width and \
-                       box.position[1] < event.pos[1] < box.position[1] + box.height:
-                        if not box.activated_this_iteration:
-                            box.note.play()
-                            box.activate()
-                            return
-                
-                for box in self.white_boxes + self.black_boxes:
-                    box.activated_this_iteration = False
+                            hit = True
+                            
+                if not hit:        
+                    for box in self.white_boxes:
+                        if box.position[0] < event.pos[0] < box.position[0] + box.width and \
+                        box.position[1] < event.pos[1] < box.position[1] + box.height:
+                                box.note.play()
+                                box.activate()
+                                return
 
     def update_gui(self):
         self.screen.fill((153, 204, 255))
