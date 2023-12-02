@@ -9,7 +9,7 @@ Yashasvi Agarwal, Elizabeth Link
 ***
 
 ## Project Description
-Basic piano simulator that allows user to play musical notes using either the keyboard or by clicking on the visual representation of the piano keys on the screen.
+Basic piano simulator that allows user to play musical notes using either the keyboard or by clicking on the visual of the piano keys on the screen.
 
 ## Additional Modules
 Pygame:
