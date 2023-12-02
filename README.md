@@ -6,10 +6,8 @@
 ## Team Members
 Yashasvi Agarwal, Elizabeth Link
 
-***
-
 ## Project Description
-Basic piano simulator that allows user to play musical notes using either the keyboard or by clicking on the visual of the piano keys on the screen.
+Basic piano simulator that allows user to play musical notes using either the keyboard or by clicking on the piano keys on the screen.
 
 ## Additional Modules
 Pygame:
@@ -20,14 +18,13 @@ Playsound:
    - Used for playing sound files.
    - Taylor Marks. https://pypi.org/project/playsound/
 
-
 ## Class Relationship Diagram
 
 ![class relationship diagram](assets/images/class_relationship_diagram.jpg)
 
 ## Data Permanence
 
-Sound Files stored in the "notes" folder within the "assets" folder.
+Sound files stored in the "notes" folder within the "assets" folder.
 
 ## Final GUI Design
 
@@ -47,15 +44,6 @@ Sound Files stored in the "notes" folder within the "assets" folder.
          - finalGUI.jpg
 - README.md
 
-
-### Features
-
-1. User interface
-2. Obstacle collisions
-3. Start Menu
-4. Learning mode - instructional text pop up
-5. Looping and sequencing
-
 ### Classes
 
 - Sound
@@ -66,3 +54,7 @@ Sound Files stored in the "notes" folder within the "assets" folder.
 - PianoController
 
 ## ATP
+
+1. Click a key - expect note to be played.
+2. Press letter on keyboard corresponding to a piano key - expect note to be played.
+3. Click on display screen outside of piano keys - expect no note to play.

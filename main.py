@@ -11,8 +11,7 @@ class Sound:
         Initializes sound.
         Args:
         - file_path (str): path to sound file.
-        - channel: pygame.mixer.Channel used to 
-          play multiple sounds.
+        - channel: pygame.mixer.Channel used to play multiple sounds.
         '''
         self.file_path = file_path
         self.channel = channel
@@ -35,7 +34,7 @@ class Text:
         - text (str): content of text.
         - color: color of text.
         - position (tuple): screen positioning of text.
-        - font_size (int): size of text, set to 24.
+        - font_size (int): size of text, default set to 24.
         '''
         self.font = pygame.font.SysFont(None, font_size)
         self.text = text
@@ -52,14 +51,13 @@ class Text:
 
     def draw(self, screen):
         '''
-        Displays text with specified parameters on
-        specified screen coordinates.
+        Displays text with specified screen coordinates.
         '''
         screen.blit(self.image, self.rect)
             
 class Box:
     '''
-    Represents box to be displayed on screen.
+    Displays box on screen to represent piano key.
     Possesses triggered actions.
     '''
     
@@ -83,8 +81,7 @@ class Box:
         
     def draw(self, screen):
         '''
-        Displays box with specified parameters on
-        specified screen coordinates.
+        Displays box with specified parameters and screen coordinates.
         '''
         pygame.draw.rect(screen, self.color, (self.position[0], self.position[1], self.width, self.height))
 
@@ -97,7 +94,7 @@ class Box:
         
     def update_color(self):
         '''
-        Changes color of box for specified time.
+        Sets active_color back to default_color after 100 ms.
         '''
         elapsed_time = pygame.time.get_ticks() - self.activation_time
         if elapsed_time > 100:
@@ -155,12 +152,15 @@ class PianoController:
     Handles user input.
     Updates GUI.
     '''
+    
     def __init__(self):
         '''
-        Intializes'''
+        Intializes Piano Controller.
+        Initializes pygame.
+        Initializes pygame mixer.
+        '''
         pygame.init()
         pygame.mixer.init()
-
         self.screen = pygame.display.set_mode((940, 300))
         pygame.display.set_caption("CS 110 FINAL EXAM")
 
@@ -224,6 +224,9 @@ class PianoController:
         ]
 
     def handle_user_input(self):
+        '''
+        Handles user input - mouse and keyboard actions.
+        '''
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -259,7 +262,11 @@ class PianoController:
                                 box.activate()
                                 return
 
-    def update_gui(self):
+    def draw_piano(self):
+        '''
+        Updates GUI.
+        Draws piano - boxes and text.
+        '''
         self.screen.fill((153, 204, 255))
 
         for box in self.white_boxes:
@@ -268,17 +275,19 @@ class PianoController:
         for box in self.black_boxes:
             box.update_color()
             box.draw(self.screen)
-            
         for text in self.texts:
             text.draw(self.screen)
 
         pygame.display.flip()
 
 def main():
+    '''
+    Runs program.
+    '''
     piano = PianoController()
 
     while True:
         piano.handle_user_input()
-        piano.update_gui()
+        piano.draw_piano()
 
 main()
