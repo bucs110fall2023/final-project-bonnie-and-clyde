@@ -7,7 +7,22 @@ class Sound:
 
     def play(self):
         self.channel.play(pygame.mixer.Sound(self.file_path))
+        
+class Text:
+    def __init__(self, text, color, position, font_size=24):
+        self.font = pygame.font.SysFont(None, font_size)
+        self.text = text
+        self.color = color
+        self.position = position
+        self.render_text()
 
+    def render_text(self):
+        self.image = self.font.render(self.text, True, self.color)
+        self.rect = self.image.get_rect(topleft=self.position)
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+            
 class Box:
     def __init__(self, note, key, position):
         self.note = note
@@ -36,22 +51,24 @@ class Box:
             self.color = self.default_color
         
 class WhiteBox(Box):
-    def __init__(self, note, key, position):
+    def __init__(self, note, key, position, text):
         super().__init__(note, key, position)
         self.width = 100
         self.height = 200
         self.default_color = (255, 255, 255)
         self.active_color = (224, 224, 224)
         self.color = self.default_color
+        self.text = text
 
 class BlackBox(Box):
-    def __init__(self, note, key, position):
+    def __init__(self, note, key, position, text):
         super().__init__(note, key, position)
         self.width = 70
         self.height = 110
         self.default_color = (0, 0, 0)
         self.active_color = (64, 64, 64)
-        self.color = self.default_color          
+        self.color = self.default_color
+        self.text = text          
             
 class PianoController:
     def __init__(self):
@@ -64,45 +81,62 @@ class PianoController:
         self.channels = [pygame.mixer.Channel(i) for i in range(8)]
         
         self.white_sounds = [
-            Sound("notes/(W1)_noteC_letterA.mp3", self.channels[0]),
-            Sound("notes/(W2)_noteD_letterS.mp3", self.channels[1]),
-            Sound("notes/(W3)_noteE_letterD.mp3", self.channels[2]),
-            Sound("notes/(W4)_noteF_letterF.mp3", self.channels[3]),
-            Sound("notes/(W5)_noteG_letterG.mp3", self.channels[4]),
-            Sound("notes/(W6)_noteA_letterH.mp3", self.channels[5]),
-            Sound("notes/(W7)_noteB_letterJ.mp3", self.channels[6]),
-            Sound("notes/(W8)_noteC_letterK.mp3", self.channels[7]),
+            Sound("assets/notes/(W1)_noteC_letterA.mp3", self.channels[0]),
+            Sound("assets/notes/(W2)_noteD_letterS.mp3", self.channels[1]),
+            Sound("assets/notes/(W3)_noteE_letterD.mp3", self.channels[2]),
+            Sound("assets/notes/(W4)_noteF_letterF.mp3", self.channels[3]),
+            Sound("assets/notes/(W5)_noteG_letterG.mp3", self.channels[4]),
+            Sound("assets/notes/(W6)_noteA_letterH.mp3", self.channels[5]),
+            Sound("assets/notes/(W7)_noteB_letterJ.mp3", self.channels[6]),
+            Sound("assets/notes/(W8)_noteC_letterK.mp3", self.channels[7]),
         ]
 
         self.white_boxes = [
-            WhiteBox(self.white_sounds[0], pygame.K_a, (30, 50)),
-            WhiteBox(self.white_sounds[1], pygame.K_s, (142, 50)),
-            WhiteBox(self.white_sounds[2], pygame.K_d, (254, 50)),
-            WhiteBox(self.white_sounds[3], pygame.K_f, (366, 50)),
-            WhiteBox(self.white_sounds[4], pygame.K_g, (478, 50)),
-            WhiteBox(self.white_sounds[5], pygame.K_h, (590, 50)),
-            WhiteBox(self.white_sounds[6], pygame.K_j, (702, 50)),
-            WhiteBox(self.white_sounds[7], pygame.K_k, (814, 50)),
+            WhiteBox(self.white_sounds[0], pygame.K_a, (30, 50), "A"),
+            WhiteBox(self.white_sounds[1], pygame.K_s, (142, 50), "S"),
+            WhiteBox(self.white_sounds[2], pygame.K_d, (254, 50), "D"),
+            WhiteBox(self.white_sounds[3], pygame.K_f, (366, 50), "F"),
+            WhiteBox(self.white_sounds[4], pygame.K_g, (478, 50), "G"),
+            WhiteBox(self.white_sounds[5], pygame.K_h, (590, 50), "H"),
+            WhiteBox(self.white_sounds[6], pygame.K_j, (702, 50), "J"),
+            WhiteBox(self.white_sounds[7], pygame.K_k, (814, 50), "K"),
         ]
 
         self.channels = [pygame.mixer.Channel(i) for i in range(5)]
         
         self.black_sounds = [
-            Sound("notes/(B1)_noteC#_letterW.mp3", self.channels[0]),
-            Sound("notes/(B2)_noteD#_letterE.mp3", self.channels[1]),
-            Sound("notes/(B3)_noteF#_letterT.mp3", self.channels[2]),
-            Sound("notes/(B4)_noteG#_letterY.mp3", self.channels[3]),
-            Sound("notes/(B5)_noteA#_letterU.mp3", self.channels[4]),
+            Sound("assets/notes/(B1)_noteC#_letterW.mp3", self.channels[0]),
+            Sound("assets/notes/(B2)_noteD#_letterE.mp3", self.channels[1]),
+            Sound("assets/notes/(B3)_noteF#_letterT.mp3", self.channels[2]),
+            Sound("assets/notes/(B4)_noteG#_letterY.mp3", self.channels[3]),
+            Sound("assets/notes/(B5)_noteA#_letterU.mp3", self.channels[4]),
         ]
 
         self.black_boxes = [
-            BlackBox(self.black_sounds[0], pygame.K_w, (106, 50)),
-            BlackBox(self.black_sounds[1], pygame.K_e, (215, 50)),
-            BlackBox(self.black_sounds[2], pygame.K_t, (435, 50)),
-            BlackBox(self.black_sounds[3], pygame.K_y, (550, 50)),
-            BlackBox(self.black_sounds[4], pygame.K_u, (660, 50)),
+            BlackBox(self.black_sounds[0], pygame.K_w, (106, 50), "W"),
+            BlackBox(self.black_sounds[1], pygame.K_e, (215, 50), "E"),
+            BlackBox(self.black_sounds[2], pygame.K_t, (435, 50), "T"),
+            BlackBox(self.black_sounds[3], pygame.K_y, (550, 50), "Y"),
+            BlackBox(self.black_sounds[4], pygame.K_u, (660, 50), "U"),
         ]
-            
+        
+        self.texts = [
+            Text("A", (0, 0, 0), (70, 220)),
+            Text("S", (0, 0, 0), (186, 220)),
+            Text("D", (0, 0, 0), (298, 220)),
+            Text("F", (0, 0, 0), (410, 220)),
+            Text("G", (0, 0, 0), (522, 220)),
+            Text("H", (0, 0, 0), (634, 220)),
+            Text("J", (0, 0, 0), (746, 220)),
+            Text("K", (0, 0, 0), (858, 220)),
+        
+            Text("W", (255, 255, 255), (132, 130)),
+            Text("E", (255, 255, 255), (245, 130)),
+            Text("T", (255, 255, 255), (467, 130)),
+            Text("Y", (255, 255, 255), (579, 130)),
+            Text("U", (255, 255, 255), (688, 130)),
+        ]
+
     def handle_user_input(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -150,6 +184,9 @@ class PianoController:
         for box in self.black_boxes:
             box.update_color()
             box.draw(self.screen)
+            
+        for text in self.texts:
+            text.draw(self.screen)
 
         pygame.display.flip()
 
@@ -160,5 +197,4 @@ def main():
         piano.handle_user_input()
         piano.update_gui()
 
-if __name__ == '__main__':
-    main()
+main()

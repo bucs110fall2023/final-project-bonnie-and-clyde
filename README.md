@@ -1,32 +1,35 @@
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-718a45dd9cf7e7f842a935f5ebbe5719a5e09af4491e668f4dbf3b35d5cca122.svg)](https://classroom.github.com/online_ide?assignment_repo_id=12852525&assignment_repo_type=AssignmentRepo)
-:warning: Everything between << >> needs to be replaced (remove << >> after replacing)
 
-# << Project Title >>
-## CS110 Final Project  << Semester, Year >>
+# PIANO SIMULATOR
+## CS110 Final Project  Fall, 2023
 
 ## Team Members
-
 Yashasvi Agarwal, Elizabeth Link
 
 ***
 
 ## Project Description
+Basic piano simulator that allows user to play musical notes using either the keyboard or by clicking on the visual representation of the piano keys on the screen.
 
-Music Mixer - music pad containing different buttons that correspond to keyboard. Buttons play differeny notes to create music. User can hit record to create song and can hear it back.
+## Additional Modules
+Pygame:
+   - Set of Python modules designed for writing video games.
+   - Pygame Community. Pete Shinners (2011). PyGame - Python Game Development. https://www.pygame.org/docs/
 
-***    
+Playsound:
+   - Used for playing sound files.
+   - Giampaolo Rodola. "playsound Documentation." https://pypi.org/project/playsound/
 
-## GUI Design
 
-In gui.jpg
+## Class Relationship Diagram
 
-### Initial Design
+![class relationship diagram](assets/images/class_relationship_diagram.jpg)
 
-![initial gui](assets/gui.jpg)
+## Data Permanence
 
-### Final Design
+## Final GUI Design
 
-![final gui](assets/finalgui.jpg)
+![final gui](assets/images/finalgui.jpg)
 
 ## Program Design
 
@@ -40,15 +43,11 @@ In gui.jpg
 
 ### Classes
 
-Key
-- box that can be interacted with to play sound
-
-Record
-- Records audio
-- Will have timer/stopwatch
-
-Play / Pause
-- Plays back recorded audio
-- Stops played back audio
+- Sound
+- Text
+- Box
+- WhiteBox
+- BlackBox
+- PianoController
 
 ## ATP
