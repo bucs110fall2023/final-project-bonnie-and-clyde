@@ -1,15 +1,42 @@
 import pygame
 
 class Sound:
+    '''
+    Represents sound file and its 
+    associated pygame mixer channel.
+    '''
+    
     def __init__(self, file_path, channel):
+        '''
+        Initializes sound.
+        Args:
+        - file_path (str): path to sound file.
+        - channel: pygame.mixer.Channel used to 
+          play multiple sounds.
+        '''
         self.file_path = file_path
         self.channel = channel
 
     def play(self):
+        '''
+        Plays sound on associated channel. 
+        '''
         self.channel.play(pygame.mixer.Sound(self.file_path))
         
 class Text:
+    '''
+    Represents text to be displayed on screen.
+    '''
+    
     def __init__(self, text, color, position, font_size=24):
+        '''
+        Initializes text.
+        Args:
+        - text (str): content of text.
+        - color: color of text.
+        - position (tuple): screen positioning of text.
+        - font_size (int): size of text, set to 24.
+        '''
         self.font = pygame.font.SysFont(None, font_size)
         self.text = text
         self.color = color
@@ -17,20 +44,38 @@ class Text:
         self.render_text()
 
     def render_text(self):
+        '''
+        Renders text with specified parameters.
+        '''
         self.image = self.font.render(self.text, True, self.color)
         self.rect = self.image.get_rect(topleft=self.position)
 
     def draw(self, screen):
+        '''
+        Displays text with specified parameters on
+        specified screen coordinates.
+        '''
         screen.blit(self.image, self.rect)
             
 class Box:
+    '''
+    Represents box to be displayed on screen.
+    Possesses triggered actions.
+    '''
+    
     def __init__(self, note, key, position):
+        '''
+        Initializes box.
+        Args:
+        - note (sound): sound associated with box.
+        - key: key on keyboard associated with box.
+        - position (tuple): screen positioning of box.
+        '''
         self.note = note
         self.key = key
         self.position = position
         self.activation_time = 0
         self.activated_this_iteration = False
-        
         self.width = None
         self.height = None
         self.default_color = None
@@ -38,20 +83,43 @@ class Box:
         self.color = None
         
     def draw(self, screen):
+        '''
+        Displays box with specified parameters on
+        specified screen coordinates.
+        '''
         pygame.draw.rect(screen, self.color, (self.position[0], self.position[1], self.width, self.height))
 
     def activate(self):
+        '''
+        Activates box.
+        '''
         self.color = self.active_color
         self.activation_time = pygame.time.get_ticks()
         self.activated_this_iteration = True
         
     def update_color(self):
+        '''
+        Changes color of box for specified time.
+        '''
         elapsed_time = pygame.time.get_ticks() - self.activation_time
         if elapsed_time > 100:
             self.color = self.default_color
         
 class WhiteBox(Box):
+    '''
+    Represents white box to be displayed on screen.
+    Inherits attributes from Box class.
+    '''
+    
     def __init__(self, note, key, position, text):
+        '''
+        Initializes white box.
+        Args:
+        - note (sound): sound associated with box.
+        - key: key on keyboard associated with box.
+        - position (tuple): screen positioning of box.
+        - text (str): text to be displayed on screen.
+        '''
         super().__init__(note, key, position)
         self.width = 100
         self.height = 200
@@ -61,7 +129,20 @@ class WhiteBox(Box):
         self.text = text
 
 class BlackBox(Box):
+    '''
+    Represents black box to be displayed on screen.
+    Inherits attributes from Box class.
+    '''
+    
     def __init__(self, note, key, position, text):
+        '''
+        Initializes black box.
+        Args:
+        - note (sound): sound associated with box.
+        - key: key on keyboard associated with box.
+        - position (tuple): screen positioning of box.
+        - text (str): text to be displayed on screen.
+        '''
         super().__init__(note, key, position)
         self.width = 70
         self.height = 110
@@ -71,7 +152,14 @@ class BlackBox(Box):
         self.text = text          
             
 class PianoController:
+    '''
+    Controller.
+    Handles user input.
+    Updates GUI.
+    '''
     def __init__(self):
+        '''
+        Intializes'''
         pygame.init()
         pygame.mixer.init()
 

@@ -14,11 +14,11 @@ Basic piano simulator that allows user to play musical notes using either the ke
 ## Additional Modules
 Pygame:
    - Set of Python modules designed for writing video games.
-   - Pygame Community. Pete Shinners (2011). PyGame - Python Game Development. https://www.pygame.org/docs/
+   - Pete Shinners. https://www.pygame.org/docs/
 
 Playsound:
    - Used for playing sound files.
-   - Giampaolo Rodola. "playsound Documentation." https://pypi.org/project/playsound/
+   - Taylor Marks. https://pypi.org/project/playsound/
 
 
 ## Class Relationship Diagram
@@ -27,11 +27,26 @@ Playsound:
 
 ## Data Permanence
 
+Sound Files stored in the "notes" folder within the "assets" folder.
+
 ## Final GUI Design
 
 ![final gui](assets/images/finalgui.jpg)
 
 ## Program Design
+
+- main.py
+   - assets/
+      - notes/  # contains sound files
+         - (W1)_noteC_letterA.mp3
+         - (W2)_noteD_letterS.mp3
+         - ...
+         - (B5)_noteA#_letterU.mp3
+      - images/ # contains image files
+         - class_relationship_diagram.jpg
+         - finalGUI.jpg
+- README.md
+
 
 ### Features
 
